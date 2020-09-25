@@ -61,7 +61,27 @@ public class BackwardTest {
     }
 
     @Test
-    public void deve_permitir_new_campo_opcional(){
+    public void deve_permitir_incluir_campo_opcional(){
+        // setup
+        BackwardDebitoExecutadoV1 v1 = BackwardDebitoExecutadoV1.newBuilder()
+            .setValor(-99.37)
+            .setConta("893769")
+            .setDescricao("Descrição do Débito Executado")
+            .setApagarV2("apagar_v2")
+            .build();
 
+        byte[] bytesv1 = serializer.serialize(v1);
+
+        // act
+        GenericRecord registro = (GenericRecord)
+            deserializer.deserialize(TOPICO, bytesv1,
+                BackwardDebitoExecutadoV2.SCHEMA$);
+
+        // assert
+        assertEquals("-nenhum-", registro.get("metadados"));
+
+        assertEquals(v1.getValor(), registro.get("valor"));
+        assertEquals(v1.getConta(), registro.get("conta"));
+        assertEquals(v1.getDescricao(), registro.get("descricao"));
     }
 }
