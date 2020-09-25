@@ -1,0 +1,25 @@
+{
+  "name":"BackwardDebitoExecutadoV1",
+  "namespace":"com.kafkabr.e5o",
+  "type":"record",
+  "version":"1",
+  "fields":[
+      {
+          "name":"valor",
+          "type":"double"
+      },
+      {
+          "name":"conta",
+          "type":"string"
+      },
+      {
+          "name":"descricao",
+          "type":"string"
+      },
+      {
+          "name":"apagar_v2",
+          "type":"string",
+          "doc":"Campo que será eliminado na próxima versão"
+      }
+  ]
+}
