@@ -1,8 +1,6 @@
 package com.kafkabr.avro;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
@@ -37,7 +35,7 @@ public class ForwardTest {
     }
 
     @Test
-    public void deve_permitir_apagar_campo_requerido() {
+    public void deve_permitir_incluir_campo_requerido() {
 
         // setup
         ForwardDebitoExecutadoV2 v2 = ForwardDebitoExecutadoV2.newBuilder()
@@ -55,16 +53,39 @@ public class ForwardTest {
                     ForwardDebitoExecutadoV1.getClassSchema(), bytesV2);
 
         // assert
-        assertNotNull(actual);
-        assertEquals("-apagado_v2-", actual.getApagarV2());
-
         assertThrows(NullPointerException.class, () ->
             actual.get("metadados"));
+
+        assertEquals(v2.getValor(), actual.getValor());
+        assertEquals(v2.getConta(), actual.getConta());
+        assertEquals(v2.getDescricao(), actual.getDescricao());
 
     }
 
     @Test
-    public void deve_permitir_incluir_campo_opcional() {
+    public void deve_permitir_apagar_campo_opcional() {
+
+        // setup
+        ForwardDebitoExecutadoV2 v2 = ForwardDebitoExecutadoV2.newBuilder()
+            .setValor(-99.37)
+            .setConta("893769")
+            .setDescricao("Descrição do Débito Executado")
+            .setMetadados("local:sp")
+            .build();
+
+        byte[] bytesV2 = serializer.serialize(v2);
+
+        // act
+        ForwardDebitoExecutadoV1 actual = (ForwardDebitoExecutadoV1)
+            deserializer.deserialize(
+                    ForwardDebitoExecutadoV1.getClassSchema(), bytesV2);
+
+        // assert
+        assertEquals("-apagado_v2-", actual.getApagarV2());
+
+        assertEquals(v2.getValor(), actual.getValor());
+        assertEquals(v2.getConta(), actual.getConta());
+        assertEquals(v2.getDescricao(), actual.getDescricao());
 
     }
 }
