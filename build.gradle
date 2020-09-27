@@ -38,3 +38,12 @@ test {
         systemProperties System.properties
     }
 }
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            srcDir 'build/generated-main-avro-java'
+        }
+    }
+}
