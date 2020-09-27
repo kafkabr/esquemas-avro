@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import com.kafkabr.e5o.BackwardDebitoExecutadoV1;
 import com.kafkabr.e5o.BackwardDebitoExecutadoV2;
@@ -22,8 +21,11 @@ public class BackwardTest {
 
     private static final String TOPICO = "-configme-";
 
-    private static final AvroSerializer serializer = new AvroSerializer();
-    private static final AvroDeserializer deserializer = new AvroDeserializer();
+    private static final AvroSerializer serializer =
+        new AvroSerializer();
+
+    private static final AvroDeserializer deserializer =
+        new AvroDeserializer();
 
     @BeforeAll
     public static void beforeAll(){
@@ -36,7 +38,7 @@ public class BackwardTest {
     }
 
     @Test
-    public void deve_permitir_apagar_um_campo(){
+    public void deve_permitir_apagar_campo_opcional(){
 
         // setup
         BackwardDebitoExecutadoV1 v1 = BackwardDebitoExecutadoV1.newBuilder()
@@ -48,10 +50,11 @@ public class BackwardTest {
 
         byte[] bytesv1 = serializer.serialize(v1);
 
-        // act
+        // ####
+        // Deserializar com a V2
         GenericRecord registro = (GenericRecord)
             deserializer.deserialize(TOPICO, bytesv1,
-                BackwardDebitoExecutadoV2.SCHEMA$);
+                BackwardDebitoExecutadoV2.getClassSchema());
 
         // assert
         assertNull(registro.get("apagar_v2"));
@@ -72,7 +75,8 @@ public class BackwardTest {
 
         byte[] bytesv1 = serializer.serialize(v1);
 
-        // act
+        // ####
+        // Deserializar com a V2
         GenericRecord registro = (GenericRecord)
             deserializer.deserialize(TOPICO, bytesv1,
                 BackwardDebitoExecutadoV2.SCHEMA$);
