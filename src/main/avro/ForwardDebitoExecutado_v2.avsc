@@ -1,25 +1,25 @@
 {
-  "name":"ForwardDebitoExecutadoV2",
-  "namespace":"com.kafkabr.e5o",
-  "type":"record",
-  "version":"1",
-  "fields":[
-      {
-          "name":"valor",
-          "type":"double"
-      },
-      {
-          "name":"conta",
-          "type":"string"
-      },
-      {
-          "name":"descricao",
-          "type":"string"
-      },
-      {
-          "name":"metadados",
-          "type":"string",
-          "doc":"Novo campo requerido"
-      }
-  ]
+    "name": "ForwardDebitoExecutadoV2",
+    "namespace": "com.kafkabr.e5o",
+    "type": "record",
+    "version": "1",
+    "fields": [
+        {
+            "name": "valor",
+            "type": "double"
+        },
+        {
+            "name": "conta",
+            "type": "string"
+        },
+        {
+            "name": "descricao",
+            "type": "string"
+        },
+        {
+            "name": "metadados",
+            "type": "string",
+            "doc": "Novo campo requerido"
+        }
+    ]
 }
