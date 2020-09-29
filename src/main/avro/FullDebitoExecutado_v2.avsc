@@ -1,0 +1,26 @@
+{
+    "name": "FullDebitoExecutadoV2",
+    "namespace": "com.kafkabr.e5o",
+    "type": "record",
+    "version": "1",
+    "fields": [
+        {
+            "name": "valor",
+            "type": "double"
+        },
+        {
+            "name": "conta",
+            "type": "string"
+        },
+        {
+            "name": "descricao",
+            "type": "string"
+        },
+        {
+            "name": "metadados",
+            "type": "string",
+            "default": "-nenhum-",
+            "doc": "Novo campo opcional"
+        }
+    ]
+}
