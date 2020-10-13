@@ -6,9 +6,9 @@ Entenda como produzir e consumir estruturas complexas com Avro.
 
 - Java (JDK) 1.8
 
-## Equemas
+## Esquemas
 
-Os equemas Avro foram criados por estratégia e utilizando o mesmo evento, afim
+Os esquemas Avro foram criados por estratégia e utilizando o mesmo evento, afim
 de contribuir com estudos comparativos.
 
 `BACKWARD`
