@@ -2,17 +2,13 @@ package com.kafkabr.avro;
 
 import static java.lang.System.getProperty;
 
-import java.time.Duration;
-import java.util.Collections;
 import java.util.Properties;
-import java.util.UUID;
 
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import com.kafkabr.e5o.ForwardDebitoExecutadoV1;
+
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 /**
@@ -26,50 +22,29 @@ public class App {
 
         System.out.println(" > Registros Avro com Apache Kafka");
 
-        //try(KafkaProducer<String, OrdemCompraFaturada> producer =
-        //        new KafkaProducer<>(criarProducerConfigs())){
-        //
-        //    // Tópico que será consumido
-        //    String topico = getProperty("topico", "oc-faturada");
-        //    OrdemCompraFaturada ocFaturada = new OrdemCompraFaturada();
-        //    ocFaturada.setId(UUID.randomUUID().toString());
-        //    ocFaturada.setClienteId("20068945690");
-        //    ocFaturada.setValor(235.99);
+        try(KafkaProducer<String, ForwardDebitoExecutadoV1> producer =
+                new KafkaProducer<>(criarProducerConfigs())){
 
-        //    // ####
-        //    // Registro com estrutura complexa OrdemCompraFaturada, que será
-        //    // serializada para formato de dados Avro
-        //    ProducerRecord<String, OrdemCompraFaturada> faturada =
-        //        new ProducerRecord<String,OrdemCompraFaturada>(topico, ocFaturada);
+            String topico = getProperty("topico", "oc-faturada");
+            ForwardDebitoExecutadoV1 evento = new ForwardDebitoExecutadoV1();
+            // preencha seu evento . . .
 
-        //    RecordMetadata produzido =
-        //        producer.send(faturada).get();
+            // ####
+            // Registro com estrutura complexa OrdemCompraFaturada, que será
+            // serializada para formato de dados Avro
+            ProducerRecord<String, ForwardDebitoExecutadoV1> faturada =
+                new ProducerRecord<String, ForwardDebitoExecutadoV1>(topico, evento);
 
-        //    System.out.println(" > > Produzido:");
-        //    System.out.println(" > > > partição.: " + produzido.partition());
-        //    System.out.println(" > > > timestmap: " + produzido.timestamp());
+            RecordMetadata produzido =
+                producer.send(faturada).get();
 
-        //    try(KafkaConsumer<String, OrdemCompraFaturada> consumer =
-        //            new KafkaConsumer<>(criarConsumerConfigs())) {
+            System.out.println(" > > Produzido:");
+            System.out.println(" > > > partição.: " + produzido.partition());
+            System.out.println(" > > > timestmap: " + produzido.timestamp());
 
-        //        consumer.subscribe(Collections.singletonList(topico));
-
-        //        // ####
-        //        // Consumir ordens de compra faturadas
-        //        while(true){
-        //            ConsumerRecords<String, OrdemCompraFaturada> records =
-        //                consumer.poll(Duration.ofSeconds(5));
-
-        //            records.forEach(r -> {
-        //                System.out.println(" > > > > Ordem faturada");
-        //                System.out.println(" > > > > > " + r.value());
-        //            });
-
-        //        }
-        //    }catch(Exception e) {
-        //        e.printStackTrace();
-        //    }
-        //}
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -81,7 +56,7 @@ public class App {
         // Serializador para chave
         props.put("key.serializer", StringSerializer.class.getName());
 
-        // #########
+        // ########
         // Serializador Avro para OrdemCompraFaturada
         props.put("value.serializer",
             AvroSerializer.class.getName());
@@ -109,29 +84,4 @@ public class App {
 
         return props;
     }
-
-    public static Properties criarConsumerConfigs() {
-        Properties props = new Properties();
-
-        // Deserializador para chave
-        props.put("key.deserializer", StringDeserializer.class.getName());
-
-        // #########
-        // Deserializador Avro para OrdemCompraFaturada
-        props.put("value.deserializer",
-            AvroDeserializer.class.getName());
-
-        // Servidor Kafka
-        props.put("bootstrap.servers",
-            getProperty("kafka", "localhost:9092"));
-
-        props.put("group.id", "avro-record");
-
-        props.put("auto.offset.reset", "earliest");
-
-        props.put("schema.registry.url", "http://nao.sera.utilizado:8081");
-
-        return props;
-    }
-
 }

@@ -2,7 +2,6 @@
     "name": "ForwardDebitoExecutadoV1",
     "namespace": "com.kafkabr.e5o",
     "type": "record",
-    "version": "1",
     "fields": [
         {
             "name": "valor",
